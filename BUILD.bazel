@@ -82,32 +82,22 @@ nodejs_binary(
 # jasmine_node_test(
 #     name = "test",
 #     srcs = glob(["*.spec.js"]),
-#     # args = [
-#     #     "BABEL_ENV=node",
-#     # ],
 #     node_modules = "//:node_modules",
 #     deps = [
-#         # ":webpack",
-#         ":src_files",
 #         ":config_files",
+#         ":src_files",
 #         ":test_files",
+#         "@net_tcncloud_git_m_protos//typescript:api_v0alpha_ts_proto",
+#         "@net_tcncloud_git_m_protos//typescript:matrix_labels_ts_proto",
 #     ],
 # )
 
 nodejs_binary(
     name = "jasmine",
-    args = [
-        "BABEL_ENV=node",
-        # "--config webpack.config.js",
-        # "--entry ./public/index.js",
-        # "--watch",
-        # "--mode development",
-    ],
     data = [
-        ":dist_files",
+        ":config_files",
         ":src_files",
         ":test_files",
-        "//:config_files",
         "@net_tcncloud_git_m_protos//typescript:api_v0alpha_ts_proto",
         "@net_tcncloud_git_m_protos//typescript:matrix_labels_ts_proto",
     ],
