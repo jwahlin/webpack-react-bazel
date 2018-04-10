@@ -1,6 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+# load("@build_bazel_rules_nodejs//:defs.bzl", "jasmine_node_test")
 
 ###############################
 # Filegroups
@@ -31,9 +32,9 @@ filegroup(
 )
 
 filegroup(
-    name = "public_files",
+    name = "test_files",
     srcs = glob([
-        "public/**",
+        "spec/**",
     ]),
 )
 
@@ -62,7 +63,7 @@ nodejs_binary(
     args = [
         "--config webpack.config.js",
         # "--entry ./public/index.js",
-        "--watch",
+        # "--watch",
         "--mode development",
     ],
     data = [
@@ -78,20 +79,40 @@ nodejs_binary(
     visibility = ["//visibility:public"],
 )
 
-# nodejs_binary(
-#     name = "react_scripts",
-#     args = [
-#         "build",
-#     ],
-#     data = [
-#         ":public_files",
-#         ":src_files",
-#         "//:config_files",
-#         # "@net_tcncloud_git_m_protos//typescript:api_v0alpha_ts_proto",
-#         # "@net_tcncloud_git_m_protos//typescript:matrix_labels_ts_proto",
-#     ],
-#     entry_point = "react-scripts/bin/react-scripts.js",
+# jasmine_node_test(
+#     name = "test",
+#     srcs = glob(["*.spec.js"]),
+#     # args = [
+#     #     "BABEL_ENV=node",
+#     # ],
 #     node_modules = "//:node_modules",
-#     templated_args = ["--node_options=--preserve-symlinks"],
-#     visibility = ["//visibility:public"],
+#     deps = [
+#         # ":webpack",
+#         ":src_files",
+#         ":config_files",
+#         ":test_files",
+#     ],
 # )
+
+nodejs_binary(
+    name = "jasmine",
+    args = [
+        "BABEL_ENV=node",
+        # "--config webpack.config.js",
+        # "--entry ./public/index.js",
+        # "--watch",
+        # "--mode development",
+    ],
+    data = [
+        ":dist_files",
+        ":src_files",
+        ":test_files",
+        "//:config_files",
+        "@net_tcncloud_git_m_protos//typescript:api_v0alpha_ts_proto",
+        "@net_tcncloud_git_m_protos//typescript:matrix_labels_ts_proto",
+    ],
+    entry_point = "jasmine/bin/jasmine.js",
+    node_modules = "//:node_modules",
+    templated_args = ["--node_options=--preserve-symlinks"],
+    visibility = ["//visibility:public"],
+)
