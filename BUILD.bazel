@@ -1,0 +1,97 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+
+###############################
+# Filegroups
+###############################
+
+filegroup(
+    name = "config_files",
+    srcs = [
+        ".babelrc",
+        "package.json",
+        "tsconfig.json",
+        "webpack.config.js",
+    ],
+)
+
+filegroup(
+    name = "src_files",
+    srcs = glob([
+        "src/**",
+    ]),
+)
+
+filegroup(
+    name = "dist_files",
+    srcs = glob([
+        "dist/**",
+    ]),
+)
+
+filegroup(
+    name = "public_files",
+    srcs = glob([
+        "public/**",
+    ]),
+)
+
+filegroup(
+    name = "node_modules",
+    srcs = glob(
+        [
+            "node_modules/**",
+        ],
+        exclude = [
+            "node_modules/**/examples/**",
+            # e.g. node_modules/@firebase/firestore/coverage/browser/HeadlessChrome 64.0.3282
+            "node_modules/@firebase/**/**/browser/* */**",
+            # e.g. node_modules/adm-zip/test/assets/attributes_test/New folder/hidden.txt
+            "node_modules/**/test/**",
+            # e.g. node_modules/xpath/docs/function resolvers.md
+            "node_modules/**/docs/**",
+            # e.g. node_modules/puppeteer/.local-chromium/mac-536395/chrome-mac/Chromium.app/Contents/Versions/66.0.3347.0/Chromium Framework.framework/Chromium Framework
+            "node_modules/**/.*/**",
+        ],
+    ),
+)
+
+nodejs_binary(
+    name = "webpack",
+    args = [
+        "--config webpack.config.js",
+        # "--entry ./public/index.js",
+        "--watch",
+        "--mode development",
+    ],
+    data = [
+        ":dist_files",
+        ":src_files",
+        "//:config_files",
+        "@net_tcncloud_git_m_protos//typescript:api_v0alpha_ts_proto",
+        "@net_tcncloud_git_m_protos//typescript:matrix_labels_ts_proto",
+    ],
+    entry_point = "webpack/bin/webpack.js",
+    node_modules = "//:node_modules",
+    templated_args = ["--node_options=--preserve-symlinks"],
+    visibility = ["//visibility:public"],
+)
+
+# nodejs_binary(
+#     name = "react_scripts",
+#     args = [
+#         "build",
+#     ],
+#     data = [
+#         ":public_files",
+#         ":src_files",
+#         "//:config_files",
+#         # "@net_tcncloud_git_m_protos//typescript:api_v0alpha_ts_proto",
+#         # "@net_tcncloud_git_m_protos//typescript:matrix_labels_ts_proto",
+#     ],
+#     entry_point = "react-scripts/bin/react-scripts.js",
+#     node_modules = "//:node_modules",
+#     templated_args = ["--node_options=--preserve-symlinks"],
+#     visibility = ["//visibility:public"],
+# )
