@@ -3,7 +3,7 @@ require('babel-register')({
         [
             'babel-plugin-transform-require-ignore',
             {
-                extensions: ['.scss', '.css']
+                extensions: ['.scss', '.css', '.svg']
             }
         ]
     ]

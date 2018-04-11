@@ -10,7 +10,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jasmine BABEL_ENV=node",
+    "test": "jasmine",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
