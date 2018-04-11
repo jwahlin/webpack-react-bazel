@@ -3,8 +3,6 @@ import logo from './logo.svg';
 import * as Lbl from '../external/net_tcncloud_git_m_protos/typescript/api/v0alpha/labels_pb'
 import './App.css';
 
-console.log(Lbl)
-
 class App extends Component {
   render() {
     return (
